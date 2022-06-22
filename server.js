@@ -2,7 +2,7 @@ const http = require("http");
 require("dotenv").config(); // using .env file
 const PORT = process.env.PORT || 4000;
 const util = require("util");
-const Handler = require("./router/Handler");
+const Handler = require("./controllers/Handler");
 const url = require("url");
 
 // create new handler
