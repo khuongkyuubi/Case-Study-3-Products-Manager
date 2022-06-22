@@ -200,10 +200,7 @@ class Handler {
                     data = data.replace('{product-name}', product.productName);
                     data = data.replace('{product-detail}', product.productDetail);
                     // xử lý selected
-
-                    data = data.replace('{product-type}', product.productType);
-
-
+                    data = data.replace(`{type-${product.productType}}`, "selected");
                     data = data.replace('{product-price}', product.productPrice);
                     html = Handler.getLayout().replace('{content}', data);
                     res.write(html);
@@ -226,16 +223,16 @@ class Handler {
                 try {
 
                     const sql = `UPDATE ?? 
-                                           SET ?? = ? ,?? = ?
+                                           SET ?? = ? ,?? = ?, ?? = ?, ?? = ?
                                            WHERE ?? = ? `;
-                    const updateSql = mysql.format(sql, ["products", "name", product["name"], "price", product["price"], "id", parseInt(id)]);
+                    const updateSql = mysql.format(sql, ["products", "productName", product["product-name"], "productDetail", product["product-detail"], "productType", product["product-type"], "productPrice", product["product-price"], "productId", parseInt(id)]);
                     await query(updateSql);
 
                 } catch (err) {
                     res.end(err.message);
                 }
                 res.writeHead(302, {
-                    location: "/"
+                    location: "/products"
                 });
                 return res.end();
             })
