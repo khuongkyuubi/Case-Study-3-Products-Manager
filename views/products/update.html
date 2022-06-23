@@ -1,0 +1,56 @@
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Products</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Products</li>
+        </ol>
+        <h2>Update products</h2>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Products
+            </div>
+            <div class="card-header">
+                <form action="/update?index={product-index}&id={product-id}" method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Product name</label>
+                        <input type="text" class="form-control" id="name" name="product-name" placeholder="Product name"
+                               value="{product-name}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="detail" class="form-label">Product detail</label>
+                        <textarea class="form-control" id="detail" name="product-detail" placeholder="Product detail"
+                                  rows="5"
+                                  required>{product-detail}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Choose type</label>
+                        <select class="form-select" name="product-type" id="type" required>
+                            <option {type-Smartphone}>Smartphone</option>
+                            <option {type-Laptop}>Laptop</option>
+                            <option {type-True Wireless}>True Wireless</option>
+                            <option {type-Other}>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Product price</label>
+                        <input type="number" class="form-control" id="price" name="product-price"
+                               placeholder="Product price"
+                               value="{product-price}" required>
+                    </div>
+                    <a href="/products">
+                        <button type="button" class="btn btn-success">Back To Home</button>
+                    </a>
+
+                    <a href="/delete?index={product-index}&id={product-id}">
+                        <button type="button" class="btn btn-danger">Delete</button>
+                    </a>
+                    <button type="submit" class="btn btn-primary">Update</button>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</main>

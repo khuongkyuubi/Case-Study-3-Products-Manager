@@ -1,0 +1,64 @@
+
+<main>
+<!--    <img src="./public/jpg/test.jpg" alt="" srcset="" width="500px" height="300px">-->
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Customers</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Customers</li>
+        </ol>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Customers
+            </div>
+            <div class="card-header">
+                <a href="/customers/create" class="d-inline-flex p-2 bd-highlight" style="text-decoration: none">
+                    <button type="button" class="btn btn-success mx-auto mb-2">Add customers</button>
+                </a>
+                <form class="d-inline-flex" action="/customers/search" method="GET">
+                    <div class="input-group">
+                        <div class="form-outline">
+                            <input type="search" id="search-input" name="value" class="form-control"
+                                   placeholder="Search"
+                                   value="{search-value}">
+
+                            <!--                <label class="form-label" for="form1">Search</label>-->
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th colspan="2">Action</th>
+
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    {list-customers}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../../public/js/customers.js"></script>

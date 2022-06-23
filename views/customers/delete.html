@@ -1,0 +1,38 @@
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Customers</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Customers</li>
+        </ol>
+        <h2>Delete customer</h2>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Customers
+            </div>
+            <div class="card-header">
+                <div class="alert alert-danger" role="alert">
+                    Are you sure delete this customer!
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <td>#</td>
+                        <td>Name</td>
+                        <td>Age</td>
+
+                        <td colspan="2">Action</td>
+                    </tr>
+                    </thead>
+                    <tbody class="table-hover">
+                    {delete-customer}
+                    </tbody>
+                </table>
+                <a href="/customers">
+                    <button type="button" class="btn btn-success mt-2">Back To Home</button>
+                </a>
+            </div>
+        </div>
+    </div>
+</main>

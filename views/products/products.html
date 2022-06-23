@@ -1,0 +1,101 @@
+<!--<div class="container">-->
+<!--    <div class="">-->
+<!--        <h2 onclick="window.location.href = '/products'" style="cursor: pointer">List products</h2>-->
+
+<!--<form action="/products/search" method="GET">-->
+<!--    <div class="input-group">-->
+
+<!--        <div class="form-outline">-->
+<!--            <input type="search" id="search-input" name="value" class="form-control" placeholder="Search"-->
+<!--                   value="{search-values}">-->
+<!--            &lt;!&ndash;                <label class="form-label" for="form1">Search</label>&ndash;&gt;-->
+<!--        </div>-->
+<!--        <button type="submit" class="btn btn-primary">-->
+<!--            <i class="fas fa-search"></i>-->
+<!--        </button>-->
+<!--    </div>-->
+<!--</form>-->
+<!--        <table class="table table-hover">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <td>#</td>-->
+<!--                <td>Name</td>-->
+<!--                <td>Detail</td>-->
+<!--                <td>Type</td>-->
+<!--                <td>Price</td>-->
+<!--                <td colspan="2">Action</td>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody class="table-hover">-->
+<!--            {list-productssd}-->
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+<main>
+<!--    <img src="./public/jpg/test.jpg" alt="" srcset="" width="500px" height="300px">-->
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Products</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Products</li>
+        </ol>
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Products
+            </div>
+            <div class="card-header">
+                <a href="/create" class="d-inline-flex p-2 bd-highlight" style="text-decoration: none">
+                    <button type="button" class="btn btn-success mx-auto mb-2">Add products</button>
+                </a>
+                <form class="d-inline-flex" action="/products/search" method="GET">
+                    <div class="input-group">
+                        <div class="form-outline">
+                            <input type="search" id="search-input" name="value" class="form-control"
+                                   placeholder="Search"
+                                   value="{search-value}">
+
+                            <!--                <label class="form-label" for="form1">Search</label>-->
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-search"></i>
+                        </button>
+
+                    </div>
+                </form>
+
+            </div>
+            <div class="card-body">
+                <table id="datatablesSimple">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Detail</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th colspan="2">Action</th>
+
+                    </tr>
+                    </thead>
+                    <tfoot>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Detail</th>
+                        <th>Type</th>
+                        <th>Price</th>
+                        <th colspan="2">Action</th>
+                    </tr>
+                    </tfoot>
+                    <tbody>
+                    {list-products}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../../public/js/products.js"></script>
