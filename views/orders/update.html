@@ -1,0 +1,47 @@
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Orders</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Orders</li>
+        </ol>
+        <h2>Update order</h2>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                DataTable Orders
+            </div>
+            <div class="card-header">
+                <form action="/orders/update?id={order-id}" method="POST">
+
+
+                    <div class="mb-3">
+                        <label for="c-name" class="form-label">Customer Name</label>
+                        <select class="form-select" name="customer_id" id="c-name" required>
+                            {customer-name}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Order Date</label>
+                        <input type="date" class="form-control" id="date" name="order_date"
+                               placeholder="Order date"
+                               required value="{order-date}">
+                    </div>
+                    {product-list}
+                    <div class="mb-3" id="products-container"></div>
+
+                    <a href="/orders" class="button-link">
+                        <button type="button" class="btn btn-success">Back To Home</button>
+                    </a>
+<!--                    /orders/delete?id=23&index=1-->
+                    <a class="button-link" href="/orders/delete?id={order-id}&index={order-index}">
+                        <button type="button" class="btn btn-danger text-light">Delete</button>
+                    </a>
+                    <button type="button" id="add-product" class="btn btn-dark">Add product</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../../public/js/update.js"></script>

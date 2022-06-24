@@ -1,5 +1,6 @@
 const {fs, mysql, query, qs, url, path, getLayout} = require("../config/controller")
 const customersModel = require("../models/CustomersModel")
+const ordersModel = require("../models/OrdersModel");
 
 class CustomersController {
     constructor() {
@@ -11,8 +12,8 @@ class CustomersController {
 
 
     async customers(req, res) {
-        let valueSearch = url.parse(req.url, true).query.value;
         if (req.method === "GET") {
+            let valueSearch = url.parse(req.url, true).query.value;
             let html = '';
             const customers = await customersModel.getCustomers()
             customers.forEach((customer, index) => {
@@ -22,6 +23,9 @@ class CustomersController {
                         html += `<td>${index + 1}</td>`
                         html += `<td>${customer["customerName"]}</td>`
                         html += `<td>${customer["customerAge"]}</td>`
+                        html += `<td>${customer["orderQuantity"]}</td>`
+                        html += `<td>${customer["totalPrice"]}</td>`
+                        html += `<td><a href="/customers/detail?id=${customer["customerID"]}&index=${index}"><button class="btn btn-warning text-light">Detail</button></a></td>`
                         html += `<td><a href="/customers/delete?id=${customer["customerID"]}&index=${index}"><button class="btn btn-danger">Delete</button></a></td>`
                         html += `<td><a href="/customers/update?id=${customer["customerID"]}&index=${index}"><button class="btn btn-primary">Update</button></a></td>`
                         html += '</tr>';
@@ -53,6 +57,66 @@ class CustomersController {
         } else {
             // If method === "POST"
         }
+    }
+
+    async detail(req, res) {
+        let index = url.parse(req.url, true).query.index;
+        let id = url.parse(req.url, true).query.id;
+        let detailCustomer = await customersModel.getDetailCustomer(id);
+        let totalPrice = await  customersModel.getTotalPricePerCustomer(id);
+        console.log(totalPrice)
+        if (req.method === "GET") {
+            let html = '';
+            html += `Customer Name: <b>${detailCustomer[0]["customerName"]}</b>`
+            html += `<tr><td colspan="3">Customer ID: <b>${detailCustomer[0]["customerID"]}</b></td></tr>`
+            html += `<tr><td colspan="5">Customer age: <b>${detailCustomer[0]["customerAge"]}</b></td></tr>`
+            html += `<tr>
+                        <th>#</th>
+                        <th>Order ID</th>
+                        <th>Order Total Price</th>
+                        <th>Order Date</th>
+                        <th>Action</th>
+                      </tr>`
+            detailCustomer.forEach((detailCustomer, index) => {
+                try {
+                    if (detailCustomer) {
+                        detailCustomer["orderDate"] = new Date(detailCustomer["orderDate"]).toLocaleDateString("vi")
+                        html += '<tr>';
+                        html += `<td>${index + 1}</td>`
+                        html += `<td>${detailCustomer["orderID"]}</td>`
+                        html += `<td>${detailCustomer["orderTotalPrice"]}</td>`
+                        html += `<td>${detailCustomer["orderDate"]}</td>`
+                        html += `<td><a href="/orders/delete?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-danger">Delete</button></a></td>`
+                        html += `<td><a href="/orders/update?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-primary">Update</button></a></td>`
+                        html += '</tr>';
+                        html += '</tr>';
+                    }
+                } catch (err) {
+                    console.log(err.message);
+                }
+            });
+            html += `<tr><td colspan="3"></td><td>Total Price:</td> <td><b>${totalPrice["totalPrice"]}</b></td></tr>`
+
+            let data = "";
+            try {
+                data = fs.readFileSync('./views/customers/customer-detail.html', 'utf-8');
+            } catch (err) {
+                console.log(err.message);
+                data = err.message;
+            }
+
+            res.writeHead(200, {'Content-Type': 'text/html'});
+            data = data.replace('{customer-detail}', html);
+            data = data.replace(/{order-ID}/gim, id);
+            data = data.replace(/{order-index}/gim, index);
+            let display = getLayout.getLayout().replace('{content}', data)
+            res.write(display);
+            return res.end();
+        } else {
+            // If method === "POST"
+        }
+
+
     }
 
     // /create

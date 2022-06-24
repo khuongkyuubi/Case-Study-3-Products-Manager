@@ -1,0 +1,32 @@
+<main>
+    <div class="container-fluid px-4">
+        <h1 class="mt-4">Order detail</h1>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item"><a href="/">Dashboard</a></li>
+            <li class="breadcrumb-item active">Order detail</li>
+        </ol>
+        <h2>Order detail</h2>
+        <div class="card mb-4">
+            <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Orders detail
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <table id="datatablesSimple">
+                        {order-detail}
+                    </table>
+                </div>
+                <a href="/orders" class="button-link">
+                    <button type="button" class="btn btn-success">Back To Home</button>
+                </a>
+                <a class="button-link" href="/orders/delete?id={order-ID}&index={order-index}"><button class="btn btn-danger">Delete</button>
+                </a>
+                <a class="button-link"  href="/orders/update?id={order-ID}&index={order-index}"><button class="btn btn-primary">Update</button>
+                </a>
+
+            </div>
+        </div>
+    </div>
+</main>
+<script src="../../public/js/order-detail.js"></script>

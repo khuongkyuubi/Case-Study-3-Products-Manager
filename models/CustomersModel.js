@@ -10,8 +10,12 @@ class CustomersModel {
         let customers = [];
         try {
             // safe from unescaped input
-            const sql = `SELECT * FROM ??`;
-            const selectSql = mysql.format(sql, ["customers"]);
+            const sql = `SELECT ??, ??, ?? , COUNT(??) AS ??, SUM(??) AS ??
+                            FROM ??
+                            INNER JOIN ??
+                            ON ?? = ??
+                            GROUP BY ??;`;
+            const selectSql = mysql.format(sql, ["customers.customerName", "customers.customerID", "customers.customerAge", "orders.customerID", "orderQuantity", "orders.orderTotalPrice", "totalPrice", "customers", "orders", "customers.customerID", "orders.customerID", "customers.customerID"]);
             customers = await query(selectSql);
         } catch (err) {
             console.log(err.message);
@@ -19,6 +23,37 @@ class CustomersModel {
         return customers = JSON.parse(JSON.stringify(customers));
     }
 
+
+    // get Detail
+    async getDetailCustomer(customerId) {
+        try {
+
+            let getDetailSql = `SELECT ??, ??, ??, ??, ??, ??
+                                 FROM ??
+                                 INNER JOIN ??
+                                 ON ??= ??
+                                 WHERE ?? = ?`;
+            getDetailSql = mysql.format(getDetailSql, ["customers.customerName", "customers.customerID", "customers.customerAge", "orders.orderID", "orders.orderTotalPrice", "orders.orderDate", "customers", "orders", "customers.customerID", "orders.customerID", "customers.customerID", customerId]);
+            return JSON.parse(JSON.stringify(await query(getDetailSql)));
+        } catch (err) {
+            console.log(err.message);
+        }
+    }
+
+    // get total Price
+    async getTotalPricePerCustomer(customerId) {
+        let totalPriceSql = `SELECT customers.customerName, customers.customerID, SUM(orders.orderTotalPrice) AS totalPrice
+FROM customers
+INNER JOIN orders
+ON customers.customerID = orders.customerID
+GROUP BY customers.customerID
+HAVING  customers.customerID  = ${customerId};`
+
+        let totalPrice = await query(totalPriceSql);
+        return JSON.parse(JSON.stringify(totalPrice))[0];
+
+
+    }
 
     // add new Customers
     async addCustomer(customer) {
@@ -69,7 +104,7 @@ class CustomersModel {
 
     }
 
-    async searchCustomers(value){
+    async searchCustomers(value) {
         let customers = [];
         try {
             const sql = `SELECT * FROM ?? WHERE ?? LIKE ? OR ?? LIKE ?;`;
