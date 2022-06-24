@@ -29,7 +29,6 @@ module.exports = {
     "api/get-products-list": apiController.getProductsList
 
 
-
 };
 
 

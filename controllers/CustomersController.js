@@ -63,19 +63,19 @@ class CustomersController {
         let index = url.parse(req.url, true).query.index;
         let id = url.parse(req.url, true).query.id;
         let detailCustomer = await customersModel.getDetailCustomer(id);
-        let totalPrice = await  customersModel.getTotalPricePerCustomer(id);
+        let totalPrice = await customersModel.getTotalPricePerCustomer(id);
         console.log(totalPrice)
         if (req.method === "GET") {
             let html = '';
             html += `Customer Name: <b>${detailCustomer[0]["customerName"]}</b>`
-            html += `<tr><td colspan="3">Customer ID: <b>${detailCustomer[0]["customerID"]}</b></td></tr>`
-            html += `<tr><td colspan="5">Customer age: <b>${detailCustomer[0]["customerAge"]}</b></td></tr>`
+            html += `<tr><td colspan="7">Customer ID: <b>${detailCustomer[0]["customerID"]}</b></td></tr>`
+            html += `<tr><td colspan="7">Customer age: <b>${detailCustomer[0]["customerAge"]}</b></td></tr>`
             html += `<tr>
                         <th>#</th>
                         <th>Order ID</th>
                         <th>Order Total Price</th>
                         <th>Order Date</th>
-                        <th>Action</th>
+                        <th colspan="3">Action</th>
                       </tr>`
             detailCustomer.forEach((detailCustomer, index) => {
                 try {
@@ -86,6 +86,7 @@ class CustomersController {
                         html += `<td>${detailCustomer["orderID"]}</td>`
                         html += `<td>${detailCustomer["orderTotalPrice"]}</td>`
                         html += `<td>${detailCustomer["orderDate"]}</td>`
+                        html += `<td><a href="/orders/detail?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-warning text-light">Detail</button></a></td>`
                         html += `<td><a href="/orders/delete?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-danger">Delete</button></a></td>`
                         html += `<td><a href="/orders/update?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-primary">Update</button></a></td>`
                         html += '</tr>';
@@ -95,7 +96,7 @@ class CustomersController {
                     console.log(err.message);
                 }
             });
-            html += `<tr><td colspan="3"></td><td>Total Price:</td> <td><b>${totalPrice["totalPrice"]}</b></td></tr>`
+            html += `<tr><td colspan="1"></td><td>Total Price:</td> <td colspan="5"><b>${totalPrice["totalPrice"]}</b></td></tr>`
 
             let data = "";
             try {
