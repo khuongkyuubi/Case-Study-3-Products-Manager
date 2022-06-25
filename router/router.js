@@ -5,6 +5,7 @@ const customerController = new CustomersController();
 const dashboardController = require("../controllers/DashboardController");
 const orderController = require("../controllers/OrdersController")
 const apiController = require("../controllers/ApiController")
+const userController = require("../controllers/UsersController")
 // const router = {}
 
 module.exports = {
@@ -26,7 +27,10 @@ module.exports = {
     "orders/delete": orderController.delete,
     "orders/update": orderController.update,
     "orders/detail": orderController.detail,
-    "api/get-products-list": apiController.getProductsList
+    "api/get-products-list": apiController.getProductsList,
+    "login" : userController.login,
+    "register" : userController.register,
+    "logout" : userController.logout,
 
 
 };

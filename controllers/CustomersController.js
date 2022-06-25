@@ -64,7 +64,6 @@ class CustomersController {
         let id = url.parse(req.url, true).query.id;
         let detailCustomer = await customersModel.getDetailCustomer(id);
         let totalPrice = await customersModel.getTotalPricePerCustomer(id);
-        console.log(totalPrice)
         if (req.method === "GET") {
             let html = '';
             html += `Customer Name: <b>${detailCustomer[0]["customerName"]}</b>`
@@ -216,26 +215,27 @@ class CustomersController {
         let id = url.parse(req.url, true).query.id;
         if (req.method === "GET") {
             let html = '';
-            let customer = (await customersModel.getOneCustomer(id));
-            // return res.end("sdf")
-            fs.readFile('./views/customers/update.html', 'utf-8', function (err, data) {
-                res.writeHead(200, {'Content-Type': 'text/html'});
-                data = data.replace(/{customer-index}/gim, parseInt(index));
-                data = data.replace(/{customer-id}/gim, parseInt(id));
-                data = data.replace('{customer-name}', customer['customerName']);
-                data = data.replace('{customer-age}', customer['customerAge']);
-                // xử lý selected
-                html = CustomersController.getLayout().replace('{content}', data);
+            try {
+                let customer = (await customersModel.getOneCustomer(id));
+                // return res.end("sdf")
+                fs.readFile('./views/customers/update.html', 'utf-8', function (err, data) {
+                    res.writeHead(200, {'Content-Type': 'text/html'});
+                    data = data.replace(/{customer-index}/gim, parseInt(index));
+                    data = data.replace(/{customer-id}/gim, parseInt(id));
+                    data = data.replace('{customer-name}', customer['customerName']);
+                    data = data.replace('{customer-age}', customer['customerAge']);
+                    // xử lý selected
+                    html = CustomersController.getLayout().replace('{content}', data);
+                    res.write(html);
+                    return res.end();
+                });
+
+            } catch (err) {
+                html = "Load data fail!";
+                console.log(err.message);
                 res.write(html);
                 return res.end();
-            });
-
-            // } catch (err) {
-            //     html = "Load data fail!";
-            //     console.log(err.message);
-            //     res.write(html);
-            //     return res.end();
-            // }
+            }
         } else {
             let data = "";
             req.on('data', chunk => {
