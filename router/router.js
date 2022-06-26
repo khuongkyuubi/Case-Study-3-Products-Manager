@@ -28,16 +28,10 @@ module.exports = {
     "orders/update": orderController.update,
     "orders/detail": orderController.detail,
     "api/get-products-list": apiController.getProductsList,
-    "login" : userController.login,
-    "register" : userController.register,
-    "logout" : userController.logout,
+    "login": userController.login,
+    "register": userController.register,
+    "logout": userController.logout,
 
 
 };
 
-
-// module.exports = router;
-// router["products"] = handlers.products;
-// router["create"] = handlers.create;
-// router["delete"] = handlers.delete;
-// router["update"] = handlers.update;

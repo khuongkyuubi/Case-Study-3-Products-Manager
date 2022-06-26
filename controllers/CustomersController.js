@@ -6,8 +6,8 @@ class CustomersController {
     constructor() {
     }
 
-    static getLayout() {
-        return fs.readFileSync("./views/layouts/main.html", "utf-8");
+    static getLayout(req, res) {
+        return getLayout.getLayout(req, res);
     }
 
 
@@ -44,7 +44,7 @@ class CustomersController {
 
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{list-customers}', html);
-            let display = getLayout.getLayout().replace('{content}', data)
+            let display = getLayout.getLayout(req, res).replace('{content}', data)
             // replace search value
             if (valueSearch) {
                 display = display.replace("{search-value}", valueSearch[0])
@@ -109,7 +109,7 @@ class CustomersController {
             data = data.replace('{customer-detail}', html);
             data = data.replace(/{order-ID}/gim, id);
             data = data.replace(/{order-index}/gim, index);
-            let display = getLayout.getLayout().replace('{content}', data)
+            let display = getLayout.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
         } else {
@@ -129,7 +129,7 @@ class CustomersController {
                 }
                 let html = "";
                 res.writeHead(200, {'Content-Type': 'text/html'});
-                html = CustomersController.getLayout().replace('{content}', data);
+                html = CustomersController.getLayout(req, res).replace('{content}', data);
                 res.write(html);
                 return res.end();
             });
@@ -194,7 +194,7 @@ class CustomersController {
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{delete-customer}', html);
-            let display = CustomersController.getLayout().replace('{content}', data)
+            let display = CustomersController.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
 
@@ -225,7 +225,7 @@ class CustomersController {
                     data = data.replace('{customer-name}', customer['customerName']);
                     data = data.replace('{customer-age}', customer['customerAge']);
                     // xử lý selected
-                    html = CustomersController.getLayout().replace('{content}', data);
+                    html = CustomersController.getLayout(req, res).replace('{content}', data);
                     res.write(html);
                     return res.end();
                 });
@@ -314,7 +314,7 @@ class CustomersController {
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{list-customers}', html);
-            let display = getLayout.getLayout().replace('{content}', data);
+            let display = getLayout.getLayout(req, res).replace('{content}', data);
             // replace search value
             if (valueSearch) {
                 display = display.replace("{search-value}", valueSearch)

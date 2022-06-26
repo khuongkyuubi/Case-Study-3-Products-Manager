@@ -5,7 +5,7 @@ const fs = require("fs");
 const path = require("path");
 const cookie = require("cookie");
 module.exports = userHandler;
-userHandler.createTokenSession = function (req, res, data, strLength) {
+userHandler.createTokenSession = function (req, res, data, strLength, isRememberPass) {
     // tạo 1 random string làm token
     let possibleCharacter = 'abcdefghiklmnopqwerszx1234567890';
     let token = '';
@@ -14,10 +14,7 @@ userHandler.createTokenSession = function (req, res, data, strLength) {
         let randomCharacter = possibleCharacter.charAt(Math.floor(Math.random() * possibleCharacter.length));
         token += randomCharacter;
     }
-    //- Tạo thời gian hết hạn cho sessionId
-    let sessionLifeTime = 5 * 60
-    data.expires = Date.now() + sessionLifeTime * 1000;
-    data.maxAge = sessionLifeTime;
+
 
     // tạo 1 session lưu vào folder token với token là tên file (key)
     let fileName = './token/' + token;
@@ -30,12 +27,37 @@ userHandler.createTokenSession = function (req, res, data, strLength) {
     } catch (err) {
         console.log(err.message)
     }
-    // response header with cookie
-    try {
-        res.setHeader('Set-Cookie', cookie.serialize('sessionId', String(token), {
+
+    //- Tạo thời gian hết hạn cho sessionId
+    let sessionLifeTime = 60 * 60 * 24 // 1 day
+    data.expires = Date.now() + sessionLifeTime * 1000;
+    data.maxAge = sessionLifeTime;
+    // seting set Cookie
+    let cookieSetting = {}
+    if (isRememberPass) {
+        cookieSetting = {
             httpOnly: true,
             maxAge: sessionLifeTime // 1 week
-        }));
+        }
+    } else {
+        cookieSetting = {
+            httpOnly: true
+        }
+    }
+    console.log(isRememberPass)
+    console.log(cookieSetting)
+
+    // response header with cookie
+    console.log(JSON.parse(data)["role"].toString())
+    console.log(token)
+
+
+    try {
+        // res.setHeader('Set-Cookie', cookie.serialize([
+        //     `sessionId = ${String(token)}`,
+        //     `userRole = ${JSON.parse(data)["role"].toString()}`
+        // ], cookieSetting));
+        res.setHeader('Set-Cookie', cookie.serialize('sessionId', String(token), cookieSetting));
 
     } catch (err) {
         console.log(err.message)
@@ -43,9 +65,8 @@ userHandler.createTokenSession = function (req, res, data, strLength) {
 }
 
 
-userHandler.admin = function (req, res, user) {
-    this.createTokenSession(req, res, user, 10);
-    let cookies = cookie.parse(req.headers.cookie || '');
+userHandler.admin = function (req, res, user, isRememberPass) {
+    this.createTokenSession(req, res, user, 10, isRememberPass);
     // Redirect back after setting cookie
     res.statusCode = 302;
     // res.setHeader('Location', req.headers.referer || '/');

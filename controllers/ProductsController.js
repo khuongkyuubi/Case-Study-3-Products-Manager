@@ -9,14 +9,14 @@
 // const qs = require("qs");
 // const url = require("url");
 
-const {fs, mysql, query, qs, url, path} = require("../config/controller")
+const {fs, mysql, query, qs, url, path, getLayout} = require("../config/controller")
 
 class ProductsController {
     constructor() {
     }
 
-    static getLayout() {
-        return fs.readFileSync("./views/layouts/main.html", "utf-8");
+    static getLayout(req, res) {
+        return getLayout.getLayout(req, res);
     }
 
 
@@ -64,7 +64,7 @@ class ProductsController {
 
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{list-products}', html);
-            let display = ProductsController.getLayout().replace('{content}', data)
+            let display = ProductsController.getLayout(req, res).replace('{content}', data)
             // replace search value
             if (valueSearch) {
                 display = display.replace("{search-value}", valueSearch[0])
@@ -89,7 +89,7 @@ class ProductsController {
                 }
                 let html = "";
                 res.writeHead(200, {'Content-Type': 'text/html'});
-                html = ProductsController.getLayout().replace('{content}', data);
+                html = ProductsController.getLayout(req, res).replace('{content}', data);
                 res.write(html);
                 return res.end();
             });
@@ -166,7 +166,7 @@ class ProductsController {
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{delete-user}', html);
-            let display = ProductsController.getLayout().replace('{content}', data)
+            let display = ProductsController.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
 
@@ -212,7 +212,7 @@ class ProductsController {
                     // xử lý selected
                     data = data.replace(`{type-${product.productType}}`, "selected");
                     data = data.replace('{product-price}', product.productPrice);
-                    html = ProductsController.getLayout().replace('{content}', data);
+                    html = ProductsController.getLayout(req, res).replace('{content}', data);
                     res.write(html);
                     return res.end();
                 });
@@ -324,7 +324,7 @@ class ProductsController {
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{list-products}', html);
-            let display = ProductsController.getLayout().replace('{content}', data);
+            let display = ProductsController.getLayout(req, res).replace('{content}', data);
             // replace search value
             if (valueSearch) {
                 display = display.replace("{search-value}", valueSearch)

@@ -15,7 +15,7 @@ class DashboardController {
             }
 
             res.writeHead(200, {'Content-Type': 'text/html'});
-            let display = getLayout.getLayout().replace('{content}', data)
+            let display = getLayout.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
         } else {

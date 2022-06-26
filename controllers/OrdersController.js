@@ -6,8 +6,8 @@ class OrdersController {
     constructor() {
     }
 
-    static getLayout() {
-        return fs.readFileSync("./views/layouts/main.html", "utf-8");
+    static getLayout(req, res) {
+        return getLayout.getLayout(req, res);
     }
 
 
@@ -84,7 +84,7 @@ class OrdersController {
 
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{list-orders}', html);
-            let display = getLayout.getLayout().replace('{content}', data)
+            let display = getLayout.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
         } else {
@@ -111,7 +111,7 @@ class OrdersController {
                     cNameOption += `<option value="${customer["customerID"]}">${customer["customerName"]}</option>`
                 })
                 data = data.replace('{customer-name}', cNameOption)
-                html = OrdersController.getLayout().replace('{content}', data);
+                html = OrdersController.getLayout(req, res).replace('{content}', data);
                 res.write(html);
                 return res.end();
             });
@@ -190,7 +190,7 @@ class OrdersController {
             data = data.replace('{order-detail}', html);
             data = data.replace(/{order-ID}/gim, id);
             data = data.replace(/{order-index}/gim, index);
-            let display = getLayout.getLayout().replace('{content}', data)
+            let display = getLayout.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
         } else {
@@ -242,7 +242,7 @@ class OrdersController {
             }
             res.writeHead(200, {'Content-Type': 'text/html'});
             data = data.replace('{delete-order}', html);
-            let display = OrdersController.getLayout().replace('{content}', data)
+            let display = OrdersController.getLayout(req, res).replace('{content}', data)
             res.write(display);
             return res.end();
 
@@ -330,7 +330,7 @@ class OrdersController {
                     data = data.replace(/{order-id}/gim, id);
                     data = data.replace(/{order-index}/gim, index);
                     // xử lý selected
-                    html = OrdersController.getLayout().replace('{content}', data);
+                    html = OrdersController.getLayout(req, res).replace('{content}', data);
                     res.write(html);
                     return res.end();
                 });
