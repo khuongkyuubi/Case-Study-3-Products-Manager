@@ -5,9 +5,23 @@ class CustomersModel {
 
     }
 
+    async getCustomersAll() {
+        try {
+            let sql = `SELECT * FROM ??`
+            sql = mysql.format(sql, ["customers"]);
+            let customers = await query(sql);
+            return JSON.parse(JSON.stringify(customers));
+
+        } catch (err) {
+            console.log(err.message)
+        }
+
+
+    }
+
     // get all Customers
     async getCustomers() {
-        let customers = [];
+        // let customers = [];
         try {
             // safe from unescaped input
             const sql = `SELECT ??, ??, ?? , COUNT(??) AS ??, SUM(??) AS ??
@@ -16,11 +30,32 @@ class CustomersModel {
                             ON ?? = ??
                             GROUP BY ??;`;
             const selectSql = mysql.format(sql, ["customers.customerName", "customers.customerID", "customers.customerAge", "orders.customerID", "orderQuantity", "orders.orderTotalPrice", "totalPrice", "customers", "orders", "customers.customerID", "orders.customerID", "customers.customerID"]);
-            customers = await query(selectSql);
+            let customers = await query(selectSql);
+            return JSON.parse(JSON.stringify(customers));
+
         } catch (err) {
             console.log(err.message);
         }
-        return customers = JSON.parse(JSON.stringify(customers));
+    }
+
+    async getTotalDetaulPerCustomer(id) {
+        // let customers = [];
+        try {
+            // safe from unescaped input
+            const sql = `SELECT ??, COUNT(??) AS ??, SUM(??) AS ??
+                            FROM ??
+                            INNER JOIN ??
+                            ON ?? = ??
+                            GROUP BY ??
+                            HAVING ?? = ?;`;
+            const selectSql = mysql.format(sql, ["orders.customerID", "orders.customerID", "orderQuantity", "orders.orderTotalPrice", "totalPrice", "customers", "orders", "customers.customerID", "orders.customerID", "customers.customerID", "orders.customerID", id]);
+            // console.log(selectSql)
+            let customer = await query(selectSql);
+            return JSON.parse(JSON.stringify(customer));
+
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
 

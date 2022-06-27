@@ -165,6 +165,7 @@ class UsersController {
     }
 
     async logout(req, res) {
+        console.log("da tung vao duoc logout")
         let cookies = cookie.parse(req.headers.cookie || '');
         let token = cookies.sessionId || "";
         // Delete cookies and token session

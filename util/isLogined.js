@@ -15,8 +15,8 @@ module.exports = function isLogined(req, res) {
     const filesDefences = (/\.js|\.css|\.html|\.jpg/).test(req.url);
     let tokenName = "token/" + token;
     let checkStatus = fs.existsSync(tokenName);
-    // clear token if experied
 
+    // clear token if experied
     if (checkStatus) {
         let userInfo = fs.readFileSync(tokenName)
         userInfo = JSON.parse(String(userInfo));

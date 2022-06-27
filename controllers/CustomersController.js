@@ -15,10 +15,29 @@ class CustomersController {
         if (req.method === "GET") {
             let valueSearch = url.parse(req.url, true).query.value;
             let html = '';
-            const customers = await customersModel.getCustomers()
-            customers.forEach((customer, index) => {
+            const customers = await customersModel.getCustomers();
+            const customer2 = await customersModel.getCustomersAll();
+            // console.log(customer2)
+            // console.log(customers)
+
+
+            for (let i = 0; i < customer2.length; i++) {
+                let index = i;
+                let customer = customer2[i]
+                let customerDetail = (await customersModel.getTotalDetaulPerCustomer(customer["customerID"]));
+                if (customerDetail.length) {
+
+                    customer["orderQuantity"] = customerDetail[0]["orderQuantity"];
+                    customer["totalPrice"] = customerDetail[0]["totalPrice"];
+                } else {
+                    customer["orderQuantity"] = 0;
+                    customer["totalPrice"] = 0;
+                }
+                // console.log(customerDetail)
                 try {
                     if (customer) {
+
+
                         html += '<tr>';
                         html += `<td>${index + 1}</td>`
                         html += `<td>${customer["customerName"]}</td>`
@@ -33,7 +52,29 @@ class CustomersController {
                 } catch (err) {
                     console.log(err.message);
                 }
-            });
+
+
+            }
+            // customer2.forEach((customer, index) => {
+            //     try {
+            //         if (customer) {
+            //
+            //
+            //             html += '<tr>';
+            //             html += `<td>${index + 1}</td>`
+            //             html += `<td>${customer["customerName"]}</td>`
+            //             html += `<td>${customer["customerAge"]}</td>`
+            //             // html += `<td>${customer["orderQuantity"]}</td>`
+            //             // html += `<td>${customer["totalPrice"]}</td>`
+            //             // html += `<td><a href="/customers/detail?id=${customer["customerID"]}&index=${index}"><button class="btn btn-warning text-light">Detail</button></a></td>`
+            //             html += `<td><a href="/customers/delete?id=${customer["customerID"]}&index=${index}"><button class="btn btn-danger">Delete</button></a></td>`
+            //             html += `<td><a href="/customers/update?id=${customer["customerID"]}&index=${index}"><button class="btn btn-primary">Update</button></a></td>`
+            //             html += '</tr>';
+            //         }
+            //     } catch (err) {
+            //         console.log(err.message);
+            //     }
+            // });
             let data = "";
             try {
                 data = fs.readFileSync('./views/customers/customers.html', 'utf-8');
@@ -64,38 +105,52 @@ class CustomersController {
         let id = url.parse(req.url, true).query.id;
         let detailCustomer = await customersModel.getDetailCustomer(id);
         let totalPrice = await customersModel.getTotalPricePerCustomer(id);
+        // console.log(totalPrice)
+        // return res.end("test")
         if (req.method === "GET") {
             let html = '';
-            html += `Customer Name: <b>${detailCustomer[0]["customerName"]}</b>`
-            html += `<tr><td colspan="7">Customer ID: <b>${detailCustomer[0]["customerID"]}</b></td></tr>`
-            html += `<tr><td colspan="7">Customer age: <b>${detailCustomer[0]["customerAge"]}</b></td></tr>`
-            html += `<tr>
+            if (detailCustomer.length) {
+                html += `Customer Name: <b>${detailCustomer[0]["customerName"]}</b>`
+                html += `<tr><td colspan="7">Customer ID: <b>${detailCustomer[0]["customerID"]}</b></td></tr>`
+                html += `<tr><td colspan="7">Customer age: <b>${detailCustomer[0]["customerAge"]}</b></td></tr>`
+                html += `<tr>
                         <th>#</th>
                         <th>Order ID</th>
                         <th>Order Total Price</th>
                         <th>Order Date</th>
                         <th colspan="3">Action</th>
                       </tr>`
-            detailCustomer.forEach((detailCustomer, index) => {
-                try {
-                    if (detailCustomer) {
-                        detailCustomer["orderDate"] = new Date(detailCustomer["orderDate"]).toLocaleDateString("vi")
-                        html += '<tr>';
-                        html += `<td>${index + 1}</td>`
-                        html += `<td>${detailCustomer["orderID"]}</td>`
-                        html += `<td>${detailCustomer["orderTotalPrice"]}</td>`
-                        html += `<td>${detailCustomer["orderDate"]}</td>`
-                        html += `<td><a href="/orders/detail?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-warning text-light">Detail</button></a></td>`
-                        html += `<td><a href="/orders/delete?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-danger">Delete</button></a></td>`
-                        html += `<td><a href="/orders/update?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-primary">Update</button></a></td>`
-                        html += '</tr>';
-                        html += '</tr>';
+                detailCustomer.forEach((detailCustomer, index) => {
+                    try {
+                        if (detailCustomer) {
+                            detailCustomer["orderDate"] = new Date(detailCustomer["orderDate"]).toLocaleDateString("vi")
+                            html += '<tr>';
+                            html += `<td>${index + 1}</td>`
+                            html += `<td>${detailCustomer["orderID"]}</td>`
+                            html += `<td>${detailCustomer["orderTotalPrice"]}</td>`
+                            html += `<td>${detailCustomer["orderDate"]}</td>`
+                            html += `<td><a href="/orders/detail?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-warning text-light">Detail</button></a></td>`
+                            html += `<td><a href="/orders/delete?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-danger">Delete</button></a></td>`
+                            html += `<td><a href="/orders/update?id=${detailCustomer["orderID"]}&index=0"><button class="btn btn-primary">Update</button></a></td>`
+                            html += '</tr>';
+                            html += '</tr>';
+                        }
+                    } catch (err) {
+                        console.log(err.message);
                     }
-                } catch (err) {
-                    console.log(err.message);
-                }
-            });
-            html += `<tr><td colspan="1"></td><td>Total Price:</td> <td colspan="5"><b>${totalPrice["totalPrice"]}</b></td></tr>`
+                });
+                html += `<tr><td colspan="1"></td><td>Total Price:</td> <td colspan="5"><b>${totalPrice["totalPrice"]}</b></td></tr>`
+            } else {
+
+                html += `<tr>
+                            <th>
+                            <div class="alert alert-warning" role="alert">
+                                You have no order! Please buy something!
+                            </div>
+                            </th>
+                        </tr>`
+
+            }
 
             let data = "";
             try {
